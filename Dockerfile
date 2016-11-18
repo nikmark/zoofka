@@ -14,6 +14,7 @@ ARG urlZookeeper=${mirrorZookeeper}zookeeper/zookeeper-${ZOOKEEPER_VERSION}/zook
 RUN wget -q "${urlZookeeper}" -O "/tmp/zookeeper-${ZOOKEEPER_VERSION}.tar.gz" \
     && tar xfz /tmp/zookeeper-${ZOOKEEPER_VERSION}.tar.gz -C /opt \
     && mv /opt/zookeeper-${ZOOKEEPER_VERSION} /opt/zookeeper \
+    && cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
     && rm /tmp/zookeeper-${ZOOKEEPER_VERSION}.tar.gz 
 
 
@@ -36,11 +37,12 @@ ADD KafkaStart.sh /usr/bin/KafkaStart.sh
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181 9092
 
-# Run zookeeper
-ENTRYPOINT ["/opt/zookeeper/bin/zkServer.sh"]
-CMD ["start-foreground"]
-
 # Run kafka
 RUN chmod a+x /usr/bin/KafkaStart.sh
 
 CMD ["KafkaStart.sh"]
+
+# Run zookeeper
+ENTRYPOINT ["/opt/zookeeper/bin/zkServer.sh"]
+CMD ["start-foreground"]
+

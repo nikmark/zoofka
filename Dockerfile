@@ -30,14 +30,19 @@ RUN wget -q "${urlKafka}" -O "/tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" 
     mv /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION} /opt/kafka
     
 ADD KafkaStart.sh /usr/bin/KafkaStart.sh
-ADD ZookeeperStart.sh /usr/bin/ZookeeperStart.sh
 
+# Port exposure
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181 9092
 
+# Run zookeeper
+ENTRYPOINT ["/opt/zookeeper/bin/zkServer.sh"]
+CMD ["start-foreground"]
+
+# Run kafka
 RUN chmod a+x /usr/bin/KafkaStart.sh
-RUN chmod a+x /usr/bin/ZookeeperStart.sh
 
 CMD ["KafkaStart.sh"]
-CMD ["ZookeeperStart.sh"]
+
+
 

@@ -25,8 +25,6 @@ ADD KafkaStart.sh /usr/bin/KafkaStart.sh
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181 9092
 
-CMD ["supervisord", "-n"]
-
 RUN chmod a+x /usr/bin/KafkaStart.sh
 
 CMD ["KafkaStart.sh"]
